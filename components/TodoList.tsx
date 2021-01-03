@@ -1,21 +1,33 @@
-import { FC } from 'react';
+import { FC, MouseEvent } from 'react';
 import styled from 'styled-components';
 import { TodoItem } from 'types';
 
 type TodoListProps = {
   todoList: TodoItem[];
   removeTodo: (id: string) => void;
+  toggleTodo: (id: string) => void;
+};
+
+type StyledDone = {
+  done: boolean;
 };
 
 export const TodoLists: FC<TodoListProps> = function ({
   todoList,
   removeTodo,
+  toggleTodo,
 }) {
+  const deleteHandler = (e: MouseEvent<HTMLButtonElement>, id: string) => {
+    e.stopPropagation();
+    removeTodo(id);
+  };
+
   return (
     <TodoList>
-      {todoList.map(({ id, todo }) => (
-        <TodoListItem key={id} onClick={() => removeTodo(id)}>
-          {todo}
+      {todoList.map(({ id, todo, done }) => (
+        <TodoListItem key={id} onClick={() => toggleTodo(id)}>
+          <TodoText done={done}>{todo}</TodoText>
+          <TodoDelete onClick={(e) => deleteHandler(e, id)}>X</TodoDelete>
         </TodoListItem>
       ))}
     </TodoList>
@@ -34,4 +46,28 @@ const TodoListItem = styled.li`
   padding: 1rem;
   color: var(--text-primary);
   border: 0.1rem solid var(--divider);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const TodoText = styled.div<StyledDone>`
+  min-width: 0;
+  flex: 1;
+  text-decoration: ${(props) => (props.done ? 'line-through' : 'none')};
+`;
+
+const TodoDelete = styled.button`
+  background-color: var(--error);
+  color: var(--text-primary);
+  border: 0;
+  padding: 0.2rem 0.8rem;
+  font-size: 1rem;
+  border-radius: 2px;
+  cursor: pointer;
+
+  &:focus,
+  &:active {
+    outline: 0;
+  }
 `;

@@ -6,7 +6,7 @@ import { TodoLists } from './TodoList';
 
 export const Todos = function () {
   const [value, setValue] = useState('');
-  const { state: todoList, addTodo, removeTodo } = useListState();
+  const { state: todoList, addTodo, removeTodo, toggleTodo } = useListState();
   const handleSubmit = (e: KeyboardEvent) => {
     if (e.code === 'Enter') {
       addTodo(value);
@@ -25,7 +25,11 @@ export const Todos = function () {
         handleChange={handleChange}
         value={value}
       />
-      <TodoLists todoList={todoList} removeTodo={removeTodo} />
+      <TodoLists
+        todoList={todoList}
+        removeTodo={removeTodo}
+        toggleTodo={toggleTodo}
+      />
     </Container>
   );
 };

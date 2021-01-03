@@ -1,6 +1,7 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import { Action, TodoItem } from 'types';
 import { v4 as uuid } from 'uuid';
+import { useIsMounted } from './useIsMounted';
 import { useSafeDispatch } from './useSafeDispatch';
 
 const reducer: (
@@ -18,14 +19,37 @@ const reducer: (
       );
       return [...state.slice(0, index), ...state.slice(index + 1)];
     }
+    case 'toggle_done': {
+      if (state.length === 0) return state;
+
+      const index = state.findIndex(
+        (todo) => (todo as TodoItem).id === action.data.id,
+      );
+      const updatedTodo = { ...state[index], done: !state[index].done };
+      return [...state.slice(0, index), updatedTodo, ...state.slice(index + 1)];
+    }
+    case 'init':
+      return [...action.data];
     default:
       throw new Error('Should not be here!');
   }
 };
 
 export const useListState = function () {
+  const mounted = useIsMounted();
   const [state, dispatch] = useReducer(reducer, []);
   const safeDispatch = useSafeDispatch<Action>(dispatch);
+
+  useEffect(() => {
+    safeDispatch({
+      type: 'init',
+      data: JSON.parse(window.localStorage.getItem('todos')) || [],
+    });
+  }, []);
+
+  useEffect(() => {
+    if (mounted) window.localStorage.setItem('todos', JSON.stringify(state));
+  }, [state]);
 
   const addTodo = (todo: string) => {
     safeDispatch({ type: 'add', data: { todo } });
@@ -35,5 +59,9 @@ export const useListState = function () {
     safeDispatch({ type: 'delete', data: { id } });
   };
 
-  return { state, addTodo, removeTodo };
+  const toggleTodo = (id: string) => {
+    safeDispatch({ type: 'toggle_done', data: { id } });
+  };
+
+  return { state, addTodo, removeTodo, toggleTodo };
 };

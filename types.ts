@@ -15,6 +15,7 @@ type TodoId = {
 type Action =
   | { type: 'add'; data: AddTodo }
   | { type: 'delete'; data: TodoId }
-  | { type: 'toggle_done'; data: TodoId };
+  | { type: 'toggle_done'; data: TodoId }
+  | { type: 'init'; data: TodoItem[] };
 
 export type { TodoItem, AddTodo, TodoId, Action };

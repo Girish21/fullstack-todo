@@ -3,6 +3,7 @@
   --text-secondary: rgb(226, 77, 122);
   --text-primary: #eee;
   --divider: #585858;
+  --error: rgb(180, 0, 0);
 }
 
 html,

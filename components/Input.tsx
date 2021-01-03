@@ -81,6 +81,7 @@ const Label = styled.label<StyledProps>`
   transition: transform 200ms ease;
   transform: ${(props) =>
     props.value ? 'translateY(-2rem) scale(0.8) translateX(-1rem)' : ''};
+  pointer-events: none;
 `;
 
 const Underline = styled.div<StyledProps>`
