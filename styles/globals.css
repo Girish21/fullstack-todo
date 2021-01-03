@@ -4,6 +4,7 @@
   --text-primary: #eee;
   --divider: #585858;
   --error: rgb(180, 0, 0);
+  --button-hover: rgba(244,244,244, 0.08);
 }
 
 html,

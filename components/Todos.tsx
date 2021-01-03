@@ -38,7 +38,6 @@ const Container = styled.div`
   width: 80%;
   margin: 0 auto;
   padding: 1rem 0.4rem;
-  color: var(--text-secondary);
 `;
 
 const Heading = styled.h1`
@@ -46,4 +45,5 @@ const Heading = styled.h1`
   margin: 0 0 1rem;
   padding: 0;
   text-align: center;
+  color: var(--text-secondary);
 `;

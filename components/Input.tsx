@@ -1,5 +1,8 @@
-import { ChangeEvent, FC, KeyboardEvent } from 'react';
+import { ChangeEvent, FC, KeyboardEvent, useState } from 'react';
+import { MdCheckBox, MdImage } from 'react-icons/md';
 import styled from 'styled-components';
+import { IconButton } from './Button';
+import { ClickAwayListener } from './ClickAwayListener';
 
 type InputProp = {
   value: string;
@@ -7,8 +10,28 @@ type InputProp = {
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
-type StyledProps = {
-  value: string;
+type EditableTextAreaType = {
+  focused: boolean;
+  setFocus: (state: boolean) => void;
+};
+
+type NoteTextfieldType = {
+  focused: boolean;
+};
+
+const EditableTextArea: FC<EditableTextAreaType> = function ({
+  setFocus,
+  focused,
+}) {
+  return (
+    <NoteTextfield
+      focused={focused}
+      role='textarea'
+      contentEditable
+      onClick={() => setFocus(true)}
+      onFocus={() => setFocus(true)}
+    />
+  );
 };
 
 export const Input: FC<InputProp> = function ({
@@ -16,83 +39,65 @@ export const Input: FC<InputProp> = function ({
   handleSubmit,
   handleChange,
 }) {
+  const [focused, setFocused] = useState(false);
+
+  const setFocusState = (state: boolean) => setFocused(state);
+
   return (
-    <FormContainer>
-      <StyledInput
-        id='todo-input'
-        onKeyUp={handleSubmit}
-        onChange={handleChange}
-        value={value}
-        autoComplete='new-password'
-      />
-      <Label htmlFor='todo-input' className='label' value={value}>
-        Add Todo
-      </Label>
-      <Underline value={value} />
-    </FormContainer>
+    <ClickAwayListener onClickAway={() => setFocusState(false)}>
+      <FormContainer>
+        <EditableTextArea setFocus={setFocusState} focused={focused} />
+        <ButtonContainer>
+          <IconButton opacity={0.6}>
+            <MdCheckBox />
+          </IconButton>
+          <IconButton opacity={0.6}>
+            <MdImage />
+          </IconButton>
+        </ButtonContainer>
+      </FormContainer>
+    </ClickAwayListener>
   );
 };
 
 const FormContainer = styled.div`
-  position: sticky;
-  height: 3.5rem;
-  width: 30rem;
+  width: 35rem;
   margin: 0 auto;
-  top: -1px;
   background-color: var(--bg);
-  z-index: 100;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  padding: 0 1rem;
 `;
 
-const StyledInput = styled.input`
+const NoteTextfield = styled.div<NoteTextfieldType>`
+  flex: 1;
+  cursor: text;
   display: block;
-  width: 100%;
-  height: 3rem;
-  background: transparent;
-  border: 0;
-  color: var(--text-primary);
-  font-size: 2rem;
-  position: absolute;
-  top: 0;
-  left: 0;
+  overflow: hidden;
 
-  &:focus,
-  &:active {
+  &:empty::before {
+    content: 'Take a note...';
+    color: inherit;
+    opacity: 0.8;
+    font-size: ${(props) => (props.focused ? '0.875rem' : '1rem')};
+  }
+
+  &:active,
+  &:focus {
     outline: 0;
   }
-
-  &:focus ~ div,
-  &:active ~ div {
-    background-color: var(--text-secondary);
-    transform: translateY(5px);
-  }
-
-  &:focus ~ label,
-  &:active ~ label {
-    transform: translateY(-2rem) scale(0.8) translateX(-1rem);
-  }
 `;
 
-const Label = styled.label<StyledProps>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  color: var(--text-secondary);
-  font-size: 2rem;
-  transition: transform 200ms ease;
-  transform: ${(props) =>
-    props.value ? 'translateY(-2rem) scale(0.8) translateX(-1rem)' : ''};
-  pointer-events: none;
-`;
+const ButtonContainer = styled.div`
+  & button {
+    margin-right: 8px;
 
-const Underline = styled.div<StyledProps>`
-  height: 0.1rem;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: auto;
-  transition: all 200ms ease-out;
-  background-color: ${(props) =>
-    props.value ? 'var(--text-secondary)' : '#666'};
-  transform: ${(props) => (props.value ? 'translateY(5px)' : '')};
+    &:last-of-type {
+      margin: 0;
+    }
+  }
 `;
