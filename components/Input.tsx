@@ -58,12 +58,8 @@ export const Input: FC<InputProp> = function ({ handleSubmit }) {
 
   const checkFocus = () => {
     if (
-      !(
-        titleRef.current &&
-        titleRef.current.innerText.length === 0 &&
-        bodyRef.current &&
-        bodyRef.current.innerText.length === 0
-      )
+      (titleRef.current !== null && titleRef.current.innerText.length !== 0) ||
+      (bodyRef.current !== null && bodyRef.current.innerText.length !== 0)
     ) {
       handleSubmit(bodyRef.current.innerText);
       bodyRef.current.innerText = '';
