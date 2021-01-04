@@ -2,9 +2,10 @@
   --bg: #333;
   --text-secondary: rgb(226, 77, 122);
   --text-primary: #eee;
+  --text-alt: rgb(150, 150, 150);
   --divider: #585858;
   --error: rgb(180, 0, 0);
-  --button-hover: rgba(244,244,244, 0.08);
+  --button-hover: rgba(244, 244, 244, 0.08);
 }
 
 html,

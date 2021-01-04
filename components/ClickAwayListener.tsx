@@ -1,4 +1,4 @@
-import React, { FC, useRef, useEffect } from 'react';
+import React, { FC, HTMLAttributes, useEffect, useRef } from 'react';
 
 type MouseEvents = 'click' | 'mousedown' | 'mouseup';
 type TouchEvents = 'touchstart' | 'touchend';
@@ -9,7 +9,7 @@ type ClickAwayListenerProps = {
   mouseEvent?: MouseEvents;
   touchEvent?: TouchEvents;
   onClickAway: (event: Events) => void;
-};
+} & HTMLAttributes<HTMLElement>;
 
 export const ClickAwayListener: FC<ClickAwayListenerProps> = function ({
   as = 'div',

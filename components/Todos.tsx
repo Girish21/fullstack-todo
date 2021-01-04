@@ -1,30 +1,18 @@
 import { useListState } from 'hooks/useListState';
-import { ChangeEvent, KeyboardEvent, useState } from 'react';
 import styled from 'styled-components';
 import { Input } from './Input';
 import { TodoLists } from './TodoList';
 
 export const Todos = function () {
-  const [value, setValue] = useState('');
   const { state: todoList, addTodo, removeTodo, toggleTodo } = useListState();
-  const handleSubmit = (e: KeyboardEvent) => {
-    if (e.code === 'Enter') {
-      addTodo(value);
-      setValue('');
-    }
-  };
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+  const handleSubmit = (value: string) => {
+    addTodo(value);
   };
 
   return (
     <Container>
       <Heading>Todos</Heading>
-      <Input
-        handleSubmit={handleSubmit}
-        handleChange={handleChange}
-        value={value}
-      />
+      <Input handleSubmit={handleSubmit} />
       <TodoLists
         todoList={todoList}
         removeTodo={removeTodo}

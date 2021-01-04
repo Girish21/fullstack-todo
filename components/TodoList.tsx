@@ -55,6 +55,7 @@ const TodoText = styled.div<StyledDone>`
   min-width: 0;
   flex: 1;
   text-decoration: ${(props) => (props.done ? 'line-through' : 'none')};
+  white-space: pre;
 `;
 
 const TodoDelete = styled.button`
